@@ -22,5 +22,16 @@ export const userService ={
         }catch(error){
             throw error ('Error al obtener usuarios' + error.message);
         }
-    }    
+    },
+
+    async updateUser(id, data) {
+    try {
+      return await prisma.user.update({
+        where: { id: parseInt(id) },
+        data: data
+      });
+    } catch (error) {
+      throw new Error('Error al actualizar usuario: ' + error.message);
+    }
+  }
 }
