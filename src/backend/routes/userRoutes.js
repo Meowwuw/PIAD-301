@@ -21,7 +21,6 @@ const router = express.Router();
  *          example: magenta
  */
 
-
 /**
  * @swagger
  * /api/users:
@@ -31,7 +30,7 @@ const router = express.Router();
  *    responses:
  *      200:
  *        description: OK
- * 
+ *
  */
 router.get("/", userController.getUsers);
 
@@ -41,11 +40,11 @@ router.get("/", userController.getUsers);
  *  post:
  *    summary: Crear nuevo usuario
  *    tags: [Users]
- *    requestBody: 
+ *    requestBody:
  *      required: true
  *      content:
  *        application/json:
- *          schema: 
+ *          schema:
  *            type: object
  *            properties:
  *              email:
@@ -54,7 +53,7 @@ router.get("/", userController.getUsers);
  *              name:
  *                type: string
  *                example: magenta
- *    responses: 
+ *    responses:
  *      201:
  *        description: Usuario creado correctamente
  *        content:
@@ -64,13 +63,74 @@ router.get("/", userController.getUsers);
  *        description: Datos invalidos
  *      500:
  *        description: Error del servidor
- * 
+ *
  */
 router.post("/", userController.createUser);
 
 /**
- * 
+ * @swagger
+ * /api/users/{id}:
+ *  put:
+ *    summary: Actualizar usuario existente
+ *    tags: [Users]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        schema:
+ *          type: integer
+ *        description: ID del usuario
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              email:
+ *                type: string
+ *                example: magenta@gmail.com
+ *              name:
+ *                type: string
+ *                example: magenta
+ *    responses:
+ *      200:
+ *        description: Usuario actualizado correctamente
+ *        content:
+ *          application/json:
+ *            $ref: '#/components/schemas/User'
+ *      400:
+ *        description: Datos invalidos
+ *      404:
+ *        description: Usuario no encontrado
+ *      500:
+ *        description: Error del servidor
+ *
  */
 router.put("/:id", userController.updateUser);
+
+/**
+ * @swagger
+ * /api/users/{id}:
+ *  delete:
+ *    summary: Eliminar usuario
+ *    tags: [Users]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        schema:
+ *          type: integer
+ *        description: ID del usuario
+ *    responses:
+ *      200:
+ *        description: Usuario eliminado correctamente
+ *      404:
+ *        description: Usuario no encontrado
+ *      500:
+ *        description: Error del servidor
+ *
+ */
+router.delete("/:id", userController.deleteUser);
 
 export default router;

@@ -1,4 +1,5 @@
 import { sendEmail } from "../services/emailService.js";
+
 export const registerUser = async (req, res) => {
   const { email, name } = req.body; 
   await sendEmail(
