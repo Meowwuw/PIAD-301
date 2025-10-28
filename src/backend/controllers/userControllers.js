@@ -1,6 +1,6 @@
 import  {userService} from '../services/userServices.js';
 
-export const userController = {
+export const userControllers = {
     async getUsers(req, res){
         try{
             const users = await userService.getAllUsers();

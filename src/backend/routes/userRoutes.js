@@ -1,5 +1,5 @@
 import express from "express";
-import { userController } from "../controllers/userController.js";
+import { userControllers } from "../controllers/userControllers.js";
 
 const router = express.Router();
 
@@ -32,7 +32,7 @@ const router = express.Router();
  *        description: OK
  *
  */
-router.get("/", userController.getUsers);
+router.get("/", userControllers.getUsers);
 
 /**
  * @swagger
@@ -65,7 +65,7 @@ router.get("/", userController.getUsers);
  *        description: Error del servidor
  *
  */
-router.post("/", userController.createUser);
+router.post("/", userControllers.createUser);
 
 /**
  * @swagger
@@ -107,7 +107,7 @@ router.post("/", userController.createUser);
  *        description: Error del servidor
  *
  */
-router.put("/:id", userController.updateUser);
+router.put("/:id", userControllers.updateUser);
 
 /**
  * @swagger
@@ -131,6 +131,6 @@ router.put("/:id", userController.updateUser);
  *        description: Error del servidor
  *
  */
-router.delete("/:id", userController.deleteUser);
+router.delete("/:id", userControllers.deleteUser);
 
 export default router;

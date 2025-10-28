@@ -1,4 +1,4 @@
-import { sendEmail } from "../services/emailService.js";
+import { sendEmail } from "../services/emailServices.js";
 
 export const registerUser = async (req, res) => {
   const { email, name } = req.body; 

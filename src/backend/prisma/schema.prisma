@@ -1,5 +1,4 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,5 +12,9 @@ model User {
   id Int @id @default(autoincrement())
   email String @unique
   name String 
+  password String? //Metodo tradicional
+  googleId String? //Metodo login con Google
+  avatar String? //Obtener la foto de perfil
 }
+
 
