@@ -1,5 +1,6 @@
 import express from "express";
 import { authControllers } from "../controllers/authControllers.js";
+import passport from "passport";
 //import { autenticate } from "../middlewares/authMiddlewares.js";
 
 const router = express.Router();
@@ -45,5 +46,13 @@ const router = express.Router();
  *        description: Error interno del servidor
  */
 router.post("/register", authControllers.register);
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:5173/login-error",
+  }),
+  authControllers.googleCallBack
+);
 
 export default router;
