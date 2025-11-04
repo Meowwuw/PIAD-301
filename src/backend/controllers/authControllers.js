@@ -22,7 +22,7 @@ export const authControllers = {
     },
 
     //Google Callback
-    async googleCallBack(){
+    async googleCallBack(req, res){
         try{
             const user = req.user;
             const token = generateToken (user.id, user.email);

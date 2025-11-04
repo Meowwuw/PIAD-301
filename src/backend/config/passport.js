@@ -9,61 +9,60 @@ passport.use(
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
         callbackURL: "http://localhost:3000/api/auth/google/callback",
-        },
+    },
+    async (accessToken, refreshToken, profile, done) => {
+        try {
+            const email = profile.emails[0].value;
+            const googleId = profile.id;
 
-        async(profile, done) =>{
-            try{
-                const email = profile.emails[0].value;
-                const googleId = profile.id;
+            let user = await prisma.user.findUnique({
+                where: { googleId },
+            });
 
-                //Verificar que el usuario no exista en la BD
-                let user = await prisma.user.findUnique({
-                    where:{ googleId},
+            if (!user) {
+                user = await prisma.user.findUnique({
+                    where: { email },
                 });
 
-                //Buscamos al usuario con su cuenta tradicional
-                if(!user){
-                    user = await prisma.user.findUnique ({
-                            where: {email}
-                        });
-                        //Si encontramos al usuario lo actualizamos con google
-                    if(user){
-                        user = await prisma.user.update({
+                if (user) {
+                    user = await prisma.user.update({
                         where: { email },
-                        data: { 
-                            googleId: googleId, 
-                            avatar: profile.photos[0].value
+                        data: {
+                            googleId: googleId,
+                            avatar: profile.photos[0].value,
                         },
                     });
-                    //Si no existe de ninguna forma
-                }} else {
+                } else {
                     user = await prisma.user.create({
-                        data:{
+                        data: {
                             email: email,
                             name: profile.displayName,
                             googleId: googleId,
                             avatar: profile.photos[0].value,
-                        }
+                        },
                     });
                 }
-                return done(null, user);
-            }catch(error){
-                return done(error, null);
             }
+            
+            return done(null, user);
+
+        } catch (error) {
+            
+            return done(error, null);
         }
-    )
+    })
 );
 
-//Funciones para que passport maneje la sesion
-passport.serializeUser((user, done) =>{
-    done(null, user.id);
+
+passport.serializeUser((user, done) => {
+    done(null, user.id.toString()); 
 });
 
-passport.deserializeUser(async (id,done) =>{
-    try{
-        const user = await prisma.user.findUnique({where: id});
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await prisma.user.findUnique({ where: { id: parseInt(id, 10) } });
         done(null, user);
-    }catch(error){
+    } catch (error) {
         done(error, null);
     }
 });

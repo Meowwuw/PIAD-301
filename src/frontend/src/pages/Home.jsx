@@ -8,8 +8,8 @@ function Home() {
     if (storedToken) {
       setToken(storedToken);
     }
-  }),
-    [];
+  },
+    []);
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
