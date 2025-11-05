@@ -11,6 +11,9 @@ function Login() {
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError(null);
+
     try {
       const response = await fetch("http://localhost:3000/api/auth/login", {
         method: "POST",
@@ -21,10 +24,11 @@ function Login() {
       const data = await response.json();
       if(!response.ok){
         throw new Error (data.message||"Error al iniciar sesion");
-      
-        localStorage.setItem("authToken", data.data.token);
-        navigate ("/login-success");
     }
+
+    localStorage.setItem("authToken", data.data.token);
+        navigate ("/login-success");
+        
     } catch (err) {
         setError(err.message);
     }
