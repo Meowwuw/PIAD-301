@@ -5,7 +5,7 @@ function Login() {
   const GOOGLE_AUTH_URL = import.meta.env.VITE_GOOGLE_AUTH_URL;
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(""); 
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ function Login() {
 
     localStorage.setItem("authToken", data.data.token);
         navigate ("/login-success");
-        
+
     } catch (err) {
         setError(err.message);
     }

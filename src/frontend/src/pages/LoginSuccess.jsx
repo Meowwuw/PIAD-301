@@ -1,5 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import ClipLoader from "react-spinners/ClipLoader";
+
+const CheckIcon = () => (
+    <svg className="w-16 h-16 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+);
+const ErrorIcon = () => (
+    <svg className="w-16 h-16 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+);
+
 
 function LoginSuccess() {
   const [token, setToken] = useState(null);
@@ -29,36 +38,60 @@ function LoginSuccess() {
       console.error("LoginSuccess.jsx: No se recibió ningún token");
     }
     
-    setLoading(false);
+    const timer = setTimeout(() => {
+        setLoading(false);
+    }, 1500); 
 
-    setTimeout(() => {
+    const redirectTimer = setTimeout(() => {
         navigate('/'); 
-    }, 3000); 
+    }, 4500);
+
+    return () => {
+        clearTimeout(timer);
+        clearTimeout(redirectTimer);
+    };
 
   }, [location, navigate]);
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <p>Verificando autenticación...</p>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+        <ClipLoader
+          color={"#4f46e5"} 
+          loading={loading}
+          size={60} 
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+        <p className="mt-4 text-lg text-gray-600">Verificando autenticación...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="p-8 bg-white rounded-xl shadow-md text-center">
+    <div className="flex items-center justify-center min-h-screen px-4 bg-gray-50">
+      <div className="w-full max-w-md p-8 space-y-4 text-center bg-white rounded-2xl shadow-lg transform transition-all duration-500 ease-in-out">
         {token ? (
           <>
-            <h1 className="text-2xl font-bold mb-4 text-green-600">¡Inicio de Sesión Exitoso!</h1>
-            <p className="mb-6 text-gray-700">Has sido autenticado correctamente.</p>
-            <p className="text-xs text-gray-500 break-all"><strong>Token:</strong> {token}</p>
-            <p className="mt-4 text-sm text-gray-600">Serás redirigido en unos segundos...</p>
+            <CheckIcon />
+            <h1 className="text-3xl font-bold text-gray-800">¡Bienvenido!</h1>
+            <p className="text-gray-600">Tu inicio de sesión ha sido exitoso.</p>
+            <div className="pt-4">
+                <p className="text-sm text-gray-500">
+                Serás redirigido a la página principal en unos instantes...
+                </p>
+            </div>
           </>
         ) : (
           <>
-            <h1 className="text-2xl font-bold mb-4 text-red-600">Error de Autenticación</h1>
-            <p className="mb-6 text-gray-700">No se pudo obtener el token. Por favor, intenta iniciar sesión de nuevo.</p>
+            <ErrorIcon />
+            <h1 className="text-3xl font-bold text-gray-800">Algo salió mal</h1>
+            <p className="text-gray-600">
+              No pudimos verificar tu identidad. Por favor,{' '}
+              <a href="/login" className="font-medium text-indigo-600 hover:underline">
+                inténtalo de nuevo
+              </a>.
+            </p>
           </>
         )}
       </div>
